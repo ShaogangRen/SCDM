@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#164c40">
+  <meta name="description" content="SCDM: Scalable Causal Discovery in Nonlinear Temporal Systems with Meta-Learning. Shared temporal prediction, target-task sampling, and directed graph readout.">
+  <meta property="og:title" content="SCDM — Scalable Causal Discovery with Meta-Learning">
+  <meta property="og:description" content="A shared-parameter approach to discovering directed dependencies in large nonlinear temporal systems.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://shaogangren.github.io/SCDM/">
+  <meta property="og:image" content="https://shaogangren.github.io/SCDM/assets/social-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://shaogangren.github.io/SCDM/">
+  <title>SCDM | Scalable Causal Discovery with Meta-Learning</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="academic.css">
+  <script defer src="content.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+<a class="skip" href="#overview" data-i18n="skip">Skip to content</a>
+<header class="site-header">
+  <div class="header-inner">
+    <div class="lab-brand"><a href="https://shaogangren.github.io/" target="_blank" rel="noopener">Ren’s Lab</a><span aria-hidden="true">/</span><a href="#top" class="brand" aria-label="SCDM project page">SCDM</a></div>
+    <nav aria-label="Main navigation">
+      <a href="#overview" data-i18n="navOverview">Overview</a><a href="#method" data-i18n="navMethod">Method</a><a href="#results" data-i18n="navResults">Results</a><a href="#applications" data-i18n="navApplications">Visualizations</a><a href="#resources" data-i18n="navResources">Resources</a>
+    </nav>
+    <button id="language" class="language" aria-label="Switch to Chinese">中文 <span aria-hidden="true">↗</span></button>
+  </div>
+  <div id="read-progress" aria-hidden="true"></div>
+</header>
+<main id="top">
+  <section class="hero wrap">
+    <div class="eyebrow venue"><span class="status-dot"></span><span data-i18n="venue">NeurIPS 2026 · Poster</span><span class="venue-divider">/</span><span data-i18n="heroCategory">Temporal causal discovery</span></div>
+    <h1>SCDM: Scalable Causal Discovery in<br class="desktop-break"> Nonlinear Temporal Systems<br class="desktop-break"> with Meta-Learning</h1>
+    <p class="hero-deck" data-i18n="heroDeck">A shared-parameter framework for nonlinear temporal causal discovery.</p>
+    <div class="authors" id="authors"></div>
+    <p class="affiliation" data-i18n="affiliation">University of Tennessee at Chattanooga</p>
+    <div class="hero-actions"><a class="button primary" href="https://openreview.net/pdf?id=H2Bm4cicZc" target="_blank" rel="noopener"><span aria-hidden="true">↗</span><span data-i18n="readPaper">Read the paper</span></a><a class="button" href="https://openreview.net/forum?id=H2Bm4cicZc" target="_blank" rel="noopener">OpenReview <span aria-hidden="true">↗</span></a><a class="button" href="https://github.com/ShaogangRen/SCDM" target="_blank" rel="noopener"><span data-i18n="labGithub">Project GitHub</span><span aria-hidden="true">↗</span></a><a class="button" href="#citation"><span aria-hidden="true">{ }</span><span data-i18n="cite">Cite this work</span></a></div>
+    <p class="hero-code-status" data-i18n="codeNotice">Research code will be added to the project repository.</p>
+  </section>
+  <section class="visual-story wrap" aria-label="Conceptual SCDM pipeline">
+    <div class="story-top"><span class="eyebrow" data-i18n="storyLabel">The idea at a glance</span><span class="micro" data-i18n="schematicLabel">Conceptual illustration</span></div>
+    <div class="story-grid">
+      <div class="story-stage"><div class="story-stage-label"><span>01</span><span data-i18n="storyInput">Many temporal variables</span></div><svg id="signals" viewBox="0 0 290 150" role="img" aria-label="Schematic multivariate time series"></svg><p data-i18n="storyInputText">Each target variable defines a prediction task.</p></div>
+      <div class="story-stage story-shared"><div class="story-stage-label"><span>02</span><span data-i18n="storyShared">One shared initialization</span></div><div class="matrix-wrap"><svg id="matrix" viewBox="0 0 160 150" role="img" aria-label="Schematic shared structural matrix"></svg><div class="theta">Θ = {θ, W}<small data-i18n="sharedLabel">predictor + structure</small></div></div><p data-i18n="storySharedText">Sample targets, adapt on support, update on query.</p></div>
+      <div class="story-stage"><div class="story-stage-label"><span>03</span><span data-i18n="storyGraph">Directed graph scores</span></div><svg id="network" viewBox="0 0 290 150" role="img" aria-label="Schematic directed graph, not an experimental result"></svg><p data-i18n="storyGraphText">Read out continuous scores after training.</p></div>
+    </div>
+    <div class="story-bottom"><span data-i18n="storyBottom">Share the predictor. Keep the target-specific structural signal.</span><a href="#method" data-i18n="exploreMethod">Explore the method ↓</a></div>
+  </section>
+  <section id="overview" class="section wrap">
+    <div class="section-heading"><span class="eyebrow" data-i18n="overviewEyebrow">01 / Motivation</span><h2 data-i18n="overviewTitle">A quadratic problem.<br>A shared learning strategy.</h2></div>
+    <div class="two-column motivation">
+      <div class="prose"><p class="lead" data-i18n="tldr">SCDM treats the prediction of each target variable as a related task, sharing a temporal predictor and a causal-strength matrix across the system.</p><p data-i18n="motivationText">When the number of variables grows, so does the space of possible directed relations. Target-wise fitting and repeated conditional testing can become expensive. SCDM processes a subset of target tasks per episode, allowing information from those tasks to update a shared initialization.</p><p data-i18n="motivationNote">Task sampling reduces per-episode target processing. The dense structural matrix and complete graph readout still depend on system dimension.</p></div>
+      <div class="dimension-lab"><div class="lab-header"><span class="eyebrow" data-i18n="labTitle">Explore the candidate edge space</span><span class="micro">d(d − 1)</span></div><div class="dimension-number"><output id="edge-count" for="dimension">999,000</output><span data-i18n="directedPairs">possible directed pairs</span></div><label for="dimension"><span data-i18n="variables">Variables</span><output id="variable-count" for="dimension">1,000</output></label><input id="dimension" type="range" min="10" max="3000" step="10" value="1000"><div class="presets" aria-label="Choose graph dimension"><button data-dimension="100">100</button><button data-dimension="1000" class="selected">1,000</button><button data-dimension="3000">3,000</button></div><p class="micro" data-i18n="labNote">Counts exclude self-edges. This calculation illustrates graph size, not measured runtime.</p></div>
+    </div>
+    <details class="abstract"><summary><span data-i18n="abstractLabel">Read the abstract</span><span aria-hidden="true">＋</span></summary><p id="abstract-text"></p></details>
+  </section>
+  <section id="method" class="section section-tint">
+    <div class="wrap">
+      <div class="section-heading"><span class="eyebrow" data-i18n="methodEyebrow">02 / Method</span><h2 data-i18n="methodTitle">Adapt locally.<br>Learn collectively.</h2><p data-i18n="methodIntro">Temporary task adaptation and persistent shared learning play different roles. Follow one SCDM episode below.</p></div>
+      <div class="walkthrough">
+        <div class="step-list" role="tablist" aria-label="SCDM method steps" aria-orientation="vertical" id="method-tabs"></div>
+        <div id="step-panel" class="step-panel" role="tabpanel" aria-live="polite" tabindex="0"><span class="step-tag" id="step-tag"></span><h3 id="step-title"></h3><div id="step-diagram" class="step-diagram" aria-hidden="true"></div><div id="step-equation" class="equation"></div><p id="step-copy"></p><div class="step-pagination" aria-hidden="true"><i></i><i></i><i></i><i></i></div></div>
+      </div>
+      <figure class="paper-figure method-figure"><div class="figure-header"><span class="eyebrow" data-i18n="originalMethod">Original paper overview</span><button class="zoom" data-image="assets/method.webp" data-alt="Original SCDM pipeline figure" data-i18n="expandFigure">Expand figure ↗</button></div><button class="figure-image-button" data-image="assets/method.webp" data-alt="Original SCDM pipeline figure" aria-label="Expand original method figure"><img src="assets/method.webp" width="2256" height="1792" alt="Original SCDM overview: temporal data, sampled target tasks, shared parameters, support adaptation, and query meta-updates" loading="lazy"></button><figcaption data-i18n="methodCaption">Each sampled target starts from the shared parameters. Support adaptation creates a temporary copy; query losses update the persistent initialization. Graph scoring follows training.</figcaption></figure>
+    </div>
+  </section>
+  <section id="results" class="section wrap">
+    <div class="section-heading"><span class="eyebrow" data-i18n="resultsEyebrow">03 / Controlled recovery</span><h2 data-i18n="resultsTitle">Recover directed structure.<br>Across controlled systems.</h2><p data-i18n="resultsIntro">Known directed graphs let us evaluate edge-ranking performance. Results vary with the dataset and the metric.</p></div>
+    <div class="result-controls"><div class="segmented" id="dataset-tabs" role="tablist" aria-label="Select benchmark"></div><fieldset class="metric-toggle"><legend class="sr-only" data-i18n="metricLabel">Evaluation metric</legend><label><input type="radio" name="metric" value="auroc">AUROC</label><label><input type="radio" name="metric" value="auprc" checked>AUPRC</label></fieldset></div>
+    <div class="result-panel" role="tabpanel" id="result-panel" aria-live="polite"><div class="chart-caption"><h3 id="chart-title"></h3><span class="micro" data-i18n="chartProtocol">Mean ± 95% CI · higher is better</span></div><div id="result-chart" class="result-chart"></div><div class="chart-axis" aria-hidden="true"><span>0.0</span><span>0.2</span><span>0.4</span><span>0.6</span><span>0.8</span><span>1.0</span></div><p id="result-takeaway" class="takeaway"></p></div>
+    <div class="table-title"><h3 data-i18n="allResults">All benchmark results</h3><span class="micro" data-i18n="tableNote">Bold: highest reported mean</span></div>
+    <div class="table-scroll" role="region" aria-label="All benchmark results table" tabindex="0"><table id="results-table"><caption class="sr-only">Controlled graph recovery, mean plus or minus 95 percent confidence interval</caption><thead></thead><tbody></tbody></table></div>
+    <p class="figure-note" data-i18n="resultsNote">Values transcribed from the manuscript’s controlled-recovery table. AUROC and AUPRC are threshold-independent and unitless; self-edges are excluded. Rankings use reported means and do not imply statistical significance.</p>
+  </section>
+  <section id="applications" class="section section-tint">
+    <div class="wrap"><div class="section-heading"><span class="eyebrow" data-i18n="applicationsEyebrow">04 / Visual evidence</span><h2 data-i18n="applicationsTitle">From brain networks<br>to traffic systems.</h2><p data-i18n="applicationsIntro">Controlled simulations and real-world observations answer different questions. Explore the figures and their evaluation roles.</p></div>
+      <div id="gallery-tabs" class="gallery-tabs" role="tablist" aria-label="Research visualizations"></div>
+      <div id="gallery-panel" role="tabpanel" aria-live="polite"><div class="gallery-head"><div><span class="eyebrow" id="gallery-type"></span><h3 id="gallery-title"></h3></div><button id="gallery-zoom" class="zoom" data-i18n="expandFigure">Expand figure ↗</button></div><figure class="paper-figure gallery-figure"><button id="gallery-image-button" class="figure-image-button"><img id="gallery-image" src="assets/fmri.webp" width="1596" height="1028" alt="Simulated fMRI ground truth and recovered scores" loading="lazy"></button><figcaption id="gallery-caption"></figcaption></figure><p class="gallery-boundary" id="gallery-boundary"></p></div>
+      <div class="scale-strip"><div><strong>100</strong><span data-i18n="scaleROI">ROI-level simulated fMRI</span></div><div><strong>1,000</strong><span data-i18n="scaleVoxel">Voxel-level observed variables</span></div><div><strong>3,000</strong><span data-i18n="scaleTraffic">Sensors in LargeST-GLA-3000</span></div></div>
+      <p class="figure-note" data-i18n="scaleNote">These are benchmark dimensions. The voxel simulator includes latent regional drivers; LargeST has no complete directed causal ground truth.</p>
+    </div>
+  </section>
+  <section id="theory" class="section wrap">
+    <div class="theory-layout"><div><span class="eyebrow" data-i18n="theoryEyebrow">05 / Theory & scope</span><h2 data-i18n="theoryTitle">A recovery principle,<br>with explicit conditions.</h2><p data-i18n="theoryIntro">For a fully observed delayed system, the graph can be recovered when estimation errors remain small relative to the population risk margin.</p></div><div class="theory-box"><span class="eyebrow" data-i18n="sufficientCondition">Sufficient condition</span><div class="theory-equation">ε<sub>stat</sub> + ε<sub>meta</sub> + ε<sub>readout</sub> <span>&lt;</span> Δ<sub>min</sub> / 2</div><dl><div><dt>ε<sub>stat</sub></dt><dd data-i18n="statError">Finite-sample error under temporal dependence</dd></div><div><dt>ε<sub>meta</sub></dt><dd data-i18n="metaError">Residual from finite episodic meta-training</dd></div><div><dt>ε<sub>readout</sub></dt><dd data-i18n="readoutError">Difference between implemented and ideal readout</dd></div></dl><p data-i18n="theoryConclusion">Under the stated assumptions, a threshold inside the separating margin recovers the delayed graph with high probability.</p></div></div>
+    <div class="scope-note"><span class="eyebrow" data-i18n="scopeLabel">Interpretation matters</span><p data-i18n="scopeText">The guarantee assumes causal sufficiency, a correct history order, temporal regularity, a positive population margin, and controlled estimation errors. It does not cover arbitrary hidden confounding. Predictive readout and geographic locality are diagnostics; neither alone verifies an individual causal effect.</p></div>
+  </section>
+  <section id="resources" class="section resources-section"><div class="wrap"><span class="eyebrow" data-i18n="resourcesEyebrow">06 / Read & build on this work</span><div class="resource-heading"><h2 data-i18n="resourcesTitle">The paper and<br>what comes next.</h2><a class="button light" href="https://openreview.net/forum?id=H2Bm4cicZc" target="_blank" rel="noopener"><span data-i18n="viewPublication">View publication</span> ↗</a></div><div class="resources-list"><a href="https://openreview.net/pdf?id=H2Bm4cicZc" target="_blank" rel="noopener"><span>01</span><div><strong data-i18n="resourcePaper">Paper & supplementary material</strong><small data-i18n="paperDetail">Full manuscript via OpenReview</small></div><span>↗</span></a><a href="https://github.com/ShaogangRen/SCDM" target="_blank" rel="noopener"><span>02</span><div><strong data-i18n="resourceCode">Code & reproducibility</strong><small data-i18n="codeDetail">Project repository established; research code to be added</small></div><span>↗</span></a><div><span>03</span><div><strong data-i18n="resourcePresentation">Poster & presentation</strong><small data-i18n="presentationDetail">Poster, slides, and talk video can be added here</small></div><span class="resource-status" data-i18n="pending">To be added</span></div></div></div></section>
+  <section id="citation" class="section wrap citation-section"><div class="citation-head"><div><span class="eyebrow" data-i18n="citationEyebrow">Citation</span><h2 data-i18n="citationTitle">Reference this work.</h2></div><button id="copy-citation" class="button" data-i18n="copyBibtex">Copy BibTeX</button></div><pre><code id="bibtex"></code></pre><p class="figure-note" data-i18n="citationNote">Citation uses the title and author list from the OpenReview record.</p></section>
+</main>
+<footer class="wrap footer"><a class="brand" href="https://shaogangren.github.io/" target="_blank" rel="noopener">Ren’s Lab</a><p data-i18n="footerText">SCDM · NeurIPS 2026</p><a href="mailto:shaogang-ren@utc.edu" data-i18n="contact">Contact the authors ↗</a></footer>
+<dialog id="image-dialog"><div class="dialog-toolbar"><span id="image-caption"></span><a id="image-download" class="zoom" download data-i18n="downloadFigure">Download image ↓</a><button id="close-dialog" class="dialog-close" aria-label="Close enlarged figure">×</button></div><div class="dialog-image-wrap"><img id="enlarged-image" alt=""></div></dialog>
+<div id="toast" role="status" aria-live="polite"></div>
+<noscript><p class="noscript">The paper links and page text are available without JavaScript. Enable JavaScript to use charts, language switching, and figure expansion.</p></noscript>
+</body>
+</html>
