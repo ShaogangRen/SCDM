@@ -1,0 +1,60 @@
+# SCDM example configuration.
+dataset_format: csv_pair          # csv_pair | npz
+dataset_path: nc8                 # directory (csv_pair) or .npz file (npz)
+data_root: .                      # dataset_path is resolved against this (relative to repo root)
+sequence_glob: "*_data_*.csv"     # csv_pair only
+structure_glob: "*_struct_*.csv"  # csv_pair only
+split_ratio: [0.7, 0.15, 0.15]    # chronological train/val/test split per sequence
+normalize: zscore                 # z-score statistics are fit on the train split only
+lag: 16                           # length p of the history window
+batch_size: 64                    # sliding-window batch size (forecasting readout only)
+num_workers: 0
+
+# --------------------------------------------------------------- model
+hidden_dim: 128                   # shared predictor: d*p -> hidden_dim
+node_hidden_dim: 64               # shared predictor: hidden_dim -> node_hidden_dim -> 1
+w_init_min: 0.0                   # W ~ U(w_init_min, w_init_max); low init lets L1 induce sparsity
+w_init_max: 0.3
+w_components: 1                   # K=1: one scalar per directed pair
+reg_mode: l1                      # l1 | group_lasso (only differs when K > 1)
+use_structural_w: true            # false = ablation with a fixed all-ones gate
+allow_self_loops: false
+
+# ------------------------------------------------------- meta-training
+training_mode: fomaml             # fomaml | no_meta | joint_supervised (ablations)
+inner_loop_steps: 3               # K inner adaptation steps per target task
+inner_loop_lr: 0.01               # alpha_theta: inner step size for the predictor
+inner_loop_lr_w: 0.001            # alpha_W: inner step size for the gate row (< alpha_theta)
+lambda_in: 0.05                   # L1 coefficient in the support loss
+lambda_out: 0.05                  # L1 coefficient in the query loss
+lr: 0.001                         # outer Adam learning rate
+weight_decay: 0.00001
+grad_clip_norm: 1.0
+total_outer_steps: 1000           # training budget, in outer meta-updates
+tasks_per_outer_step: 8           # target-task batch size; 0 = all d targets
+target_sampling_mode: uniform_random   # uniform_random | coverage_aware
+val_every_outer_steps: 50
+val_episodes: 30
+val_tasks_per_episode: 0          # 0 = score every target during validation
+patience: 10                      # early stopping after N checks without improvement (0 = off)
+
+# ---------------------------------------------------------- episodes
+l_sup: 64                         # support window length (supervised samples)
+l_qry: 64                         # query window length (supervised samples)
+train_episodes_per_cycle: null    # null = derive from sequence length
+val_episodes_per_cycle: null
+
+# ----------------------------------------------------- graph readout
+graph_readout: source_isolated     # primary paper-facing readout: structural | source_isolated
+run_source_isolated_readout: true
+source_isolated_episodes: 100     # 0 disables the source-isolated readout
+threshold_mode: acc_max           # acc_max | f1_max | fixed | top_k
+graph_threshold: 0.3              # used by threshold_mode: fixed
+top_k: null                       # used by threshold_mode: top_k
+
+# ------------------------------------------------------- run control
+seed: 0
+readout_seed: 0                   # fixed seed for the scoring episodes
+device: auto                      # auto | cpu | cuda | cuda:N
+output_dir: null                  # null = results/<run_name>
+run_name: null                    # null = timestamp

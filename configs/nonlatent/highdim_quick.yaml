@@ -1,0 +1,45 @@
+# SCDM example configuration.
+dataset_format: npz
+dataset_path: highdim64.npz
+data_root: examples/highdim_quickstart/data
+
+lag: 3
+normalize: zscore
+batch_size: 64
+
+hidden_dim: 128
+node_hidden_dim: 64
+w_init_min: 0.0
+w_init_max: 0.3
+graph_threshold: 0.1
+threshold_mode: acc_max
+
+inner_loop_steps: 3
+inner_loop_lr: 0.01
+inner_loop_lr_w: 0.001
+lambda_in: 0.05
+lambda_out: 0.05
+
+total_outer_steps: 800
+tasks_per_outer_step: 16          # 16 of the 64 targets per outer step
+target_sampling_mode: coverage_aware
+val_every_outer_steps: 200
+val_episodes: 3
+val_tasks_per_episode: 0          # 0 = score every target during validation
+patience: 0
+
+# The validation split holds floor(0.15 * 1500) = 225 steps per sequence, so the
+# episode must satisfy lag + l_sup + l_qry <= 225.
+l_sup: 64
+l_qry: 64
+
+# Scalable path: structural readout only. Setting
+# run_source_isolated_readout: true and source_isolated_episodes: 5 also works
+# here, but costs roughly 64 * 65 * 5 extra forward passes.
+graph_readout: structural
+run_source_isolated_readout: false
+source_isolated_episodes: 0
+
+seed: 0
+device: auto
+output_dir: results/highdim_quickstart

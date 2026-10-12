@@ -1,0 +1,41 @@
+# SCDM example configuration.
+dataset_format: csv_pair
+dataset_path: nc8
+data_root: examples/nc8_quickstart/data
+sequence_glob: "nc8_data_*.csv"
+structure_glob: "nc8_struct_*.csv"
+
+lag: 16
+normalize: zscore
+batch_size: 64
+
+hidden_dim: 128
+node_hidden_dim: 64
+w_init_min: 0.0
+w_init_max: 0.3
+graph_threshold: 0.3
+threshold_mode: acc_max
+
+inner_loop_steps: 3
+inner_loop_lr: 0.01
+inner_loop_lr_w: 0.001
+lambda_in: 0.05
+lambda_out: 0.05
+
+total_outer_steps: 400
+tasks_per_outer_step: 8
+val_every_outer_steps: 50
+val_episodes: 10
+patience: 0
+
+l_sup: 64
+l_qry: 64
+
+graph_readout: source_isolated
+run_source_isolated_readout: true
+source_isolated_episodes: 20
+
+seed: 0
+readout_seed: 0
+device: auto
+output_dir: results/nc8_quickstart

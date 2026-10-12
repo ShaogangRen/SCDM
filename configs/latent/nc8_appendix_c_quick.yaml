@@ -1,0 +1,52 @@
+# SCDM example configuration.
+dataset: nc8_latent
+data_root: examples/nc8_quickstart/data
+normalize: zscore
+lag: 5
+batch_size: 64
+
+q_latent: 2
+hidden_indices: [0, 5]
+
+hidden_dim: 64
+node_hidden_dim: 32
+graph_threshold: 0.1
+allow_self_loops: false
+
+w_init_min: 0.0
+w_init_max: 0.3
+w_init_min_latent: 0.3
+w_init_max_latent: 0.8
+wzz_init_diag: 0.9
+use_wzz: true
+wzz_diagonal_only: false
+
+inner_loop_steps: 2
+inner_loop_lr: 0.01
+inner_loop_lr_w: 0.001
+lr: 0.001
+weight_decay: 0.00001
+
+lambda_W: 0.05
+lambda_W_latent: 0.0
+lambda_wzx_col: 0.0
+lambda_wzx_sparse: 0.0
+lambda_wzx_div: 0.0
+lambda_z: 0.01
+z_init_scale: 0.1
+
+checkpoint_selection_rule: graph_aware  # reduced reviewer diagnostic; uses GT graph metrics
+total_outer_steps: 20
+tasks_per_outer_step: 4
+val_every_outer_steps: 10
+val_episodes: 2
+patience: 0
+
+l_sup: 32
+l_qry: 32
+train_episodes_per_cycle: 50
+val_episodes_per_cycle: 20
+
+seed: 0
+device: auto
+output_dir: results/latent_nc8_appendix_c_quick

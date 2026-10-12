@@ -1,0 +1,67 @@
+# SCDM example configuration.
+dataset: nc8_latent
+data_root: examples/nc8_quickstart/data
+split_ratio: [0.7, 0.15, 0.15]
+normalize: zscore
+batch_size: 64
+num_workers: 0
+
+seed: 0
+device: auto
+output_dir: null
+run_name: null
+
+lag: 5
+hidden_dim: 128
+node_hidden_dim: 64
+graph_threshold: 0.1
+allow_self_loops: false
+top_k: null
+
+# Latent benchmark. The learner sees only observed variables.
+q_latent: 2
+hidden_indices: [0, 5]
+
+# Block-structured W parameterization.
+w_init_min: 0.0
+w_init_max: 0.3
+w_init_min_latent: 0.3
+w_init_max_latent: 0.8
+wzz_init_diag: 0.9
+w_components: 1
+reg_mode: l1
+use_wzz: true
+wzz_diagonal_only: false
+
+# FOMAML support/query training.
+inner_loop_steps: 3
+inner_loop_lr: 0.01
+inner_loop_lr_w: 0.001
+lr: 0.001
+weight_decay: 0.00001
+
+# Latent objective.
+lambda_W: 0.05
+lambda_W_latent: 0.0
+lambda_wzx_col: 0.0
+lambda_wzx_sparse: 0.0
+lambda_wzx_div: 0.0
+lambda_z: 0.01
+z_init_scale: 0.1
+
+# Checkpoint selection.
+checkpoint_selection_rule: graph_aware  # uses GT graph metrics for diagnostic checkpoint ranking
+periodic_ckpt_steps: []
+
+# Budget.
+total_outer_steps: 500
+tasks_per_outer_step: 8
+val_every_outer_steps: 50
+val_episodes: 20
+patience: 10
+
+l_sup: 32
+l_qry: 32
+train_episodes_per_cycle: null
+val_episodes_per_cycle: null
+max_train_sequences: null
