@@ -6,6 +6,18 @@ Jingbo Wang, Kegeng Tang, Zihao Wang, and Shaogang Ren · NeurIPS 2026
 
 [Project webpage](https://shaogangren.github.io/SCDM/) · [Paper](https://openreview.net/forum?id=H2Bm4cicZc)
 
+## Repository layout
+
+```text
+scdm/           Core algorithm implementation
+configs/        Training and example configurations
+examples/       Bundled example datasets
+scripts/        Run commands
+docs/           Project webpage and its assets
+requirements.txt
+README.md
+LICENSE
+```
 ## Installation
 
 Use Python 3.10 or newer. From the repository root:
@@ -77,5 +89,5 @@ predictor and structural parameters. Graph scores are read out after training.
 ## Project webpage
 
 The repository also hosts the project webpage through GitHub Pages using
-`main` and `/ (root)`. Website text and data are in `content.js`; layout is in
-`index.html`, `styles.css` and `academic.css`; figures are in `assets/`.
+`main` and `/docs`. Website text and data are in `docs/content.js`; layout is in
+`docs/index.html`, `docs/styles.css` and `docs/academic.css`; figures are in `docs/assets/`.
