@@ -1,12 +1,10 @@
 'use strict';
 (() => {
   const content=window.SCDM;
-  let language='en', methodIndex=0, datasetIndex=2, galleryIndex=0, metric='auprc';
+  let methodIndex=0, datasetIndex=2, galleryIndex=0, metric='auprc';
   const $=selector=>document.querySelector(selector);
   const $$=selector=>Array.from(document.querySelectorAll(selector));
-  const text=value=>value[language];
   const htmlEscape=value=>String(value).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-  const originalText=new Map($$('[data-i18n]').map(el=>[el,el.innerHTML]));
   const format=value=>value.toFixed(3);
   $('#authors').innerHTML=content.authors.map(author=>{const name=`${htmlEscape(author.name)}${author.corresponding?'<sup title="Corresponding author">*</sup>':''}`;return author.url?`<a href="${author.url}" target="_blank" rel="noopener">${name}</a>`:`<span class="author-name">${name}</span>`;}).join('');
   $('#bibtex').textContent=content.bibtex;
@@ -21,28 +19,28 @@
   $$('.presets button').forEach(button=>button.addEventListener('click',()=>{$('#dimension').value=button.dataset.dimension;updateDimension();}));
 
   function renderMethod(){
-    $('#method-tabs').innerHTML=content.methods.map((step,index)=>`<button id="method-tab-${index}" role="tab" aria-selected="${index===methodIndex}" aria-controls="step-panel" tabindex="${index===methodIndex?0:-1}" data-method="${index}"><span>0${index+1}</span><span><strong>${text(step.title)}</strong><small>${text(step.subtitle)}</small></span></button>`).join('');
+    $('#method-tabs').innerHTML=content.methods.map((step,index)=>`<button id="method-tab-${index}" role="tab" aria-selected="${index===methodIndex}" aria-controls="step-panel" tabindex="${index===methodIndex?0:-1}" data-method="${index}"><span>0${index+1}</span><span><strong>${step.title}</strong><small>${step.subtitle}</small></span></button>`).join('');
     const step=content.methods[methodIndex];
     $('#step-panel').setAttribute('aria-labelledby',`method-tab-${methodIndex}`);
-    $('#step-tag').textContent=language==='en'?`STEP 0${methodIndex+1} / 04`:`步骤 0${methodIndex+1} / 04`;
-    $('#step-title').textContent=text(step.heading);
-    $('#step-copy').textContent=text(step.copy);
+    $('#step-tag').textContent=`STEP 0${methodIndex+1} / 04`;
+    $('#step-title').textContent=step.heading;
+    $('#step-copy').textContent=step.copy;
     $('#step-equation').innerHTML=step.equation;
-    $('#step-diagram').innerHTML=text(step.blocks).map((label,index)=>`${index?'<span class="arrow">→</span>':''}<span class="mini-block ${index===1?'emphasis':''}">${label}</span>`).join('');
+    $('#step-diagram').innerHTML=step.blocks.map((label,index)=>`${index?'<span class="arrow">→</span>':''}<span class="mini-block ${index===1?'emphasis':''}">${label}</span>`).join('');
     $$('.step-pagination i').forEach((dot,index)=>dot.classList.toggle('current',index===methodIndex));
   }
   function renderResults(){
     const dataset=content.datasets[datasetIndex];
-    $('#dataset-tabs').innerHTML=content.datasets.map((entry,index)=>`<button id="dataset-tab-${index}" role="tab" aria-controls="result-panel" aria-selected="${index===datasetIndex}" tabindex="${index===datasetIndex?0:-1}" data-dataset="${index}">${text(entry.name)}</button>`).join('');
+    $('#dataset-tabs').innerHTML=content.datasets.map((entry,index)=>`<button id="dataset-tab-${index}" role="tab" aria-controls="result-panel" aria-selected="${index===datasetIndex}" tabindex="${index===datasetIndex?0:-1}" data-dataset="${index}">${entry.name}</button>`).join('');
     $('#result-panel').setAttribute('aria-labelledby',`dataset-tab-${datasetIndex}`);
-    $('#chart-title').textContent=`${text(dataset.name)} / ${metric.toUpperCase()}`;
+    $('#chart-title').textContent=`${dataset.name} / ${metric.toUpperCase()}`;
     $('#result-chart').innerHTML=content.results.map(row=>{
       const [mean,ci]=row[dataset.key][metric];
       const left=Math.max(0,mean-ci)*100, right=Math.min(1,mean+ci)*100;
       return `<div class="bar-row ${row.name==='SCDM'?'ours':''}"><span class="bar-label">${row.name}</span><div class="bar-track" aria-hidden="true"><div class="bar-fill" style="width:${mean*100}%"></div><div class="ci-line" style="left:${left}%;width:${right-left}%"></div></div><span class="bar-value"><strong>${format(mean)}</strong> ± ${format(ci)}</span></div>`;
     }).join('');
-    $('#result-takeaway').textContent=text(dataset.takeaway);
-    const header=`<tr><th rowspan="2" scope="col">${language==='en'?'Method':'方法'}</th>${content.datasets.map(entry=>`<th colspan="2" scope="colgroup">${text(entry.name)}</th>`).join('')}</tr><tr>${content.datasets.map(()=>'<th scope="col">AUROC ↑</th><th scope="col">AUPRC ↑</th>').join('')}</tr>`;
+    $('#result-takeaway').textContent=dataset.takeaway;
+    const header=`<tr><th rowspan="2" scope="col">Method</th>${content.datasets.map(entry=>`<th colspan="2" scope="colgroup">${entry.name}</th>`).join('')}</tr><tr>${content.datasets.map(()=>'<th scope="col">AUROC ↑</th><th scope="col">AUPRC ↑</th>').join('')}</tr>`;
     $('#results-table thead').innerHTML=header;
     $('#results-table tbody').innerHTML=content.results.map(row=>`<tr class="${row.name==='SCDM'?'ours':''}"><th scope="row">${row.name}</th>${content.datasets.map(entry=>['auroc','auprc'].map(key=>{
       const [mean,ci]=row[entry.key][key],best=Math.max(...content.results.map(r=>r[entry.key][key][0]));
@@ -51,27 +49,21 @@
   }
   function renderGallery(){
     const item=content.gallery[galleryIndex];
-    $('#gallery-tabs').innerHTML=content.gallery.map((entry,index)=>`<button id="gallery-tab-${index}" role="tab" aria-controls="gallery-panel" aria-selected="${index===galleryIndex}" tabindex="${index===galleryIndex?0:-1}" data-gallery="${index}">${text(entry.tab)}</button>`).join('');
+    $('#gallery-tabs').innerHTML=content.gallery.map((entry,index)=>`<button id="gallery-tab-${index}" role="tab" aria-controls="gallery-panel" aria-selected="${index===galleryIndex}" tabindex="${index===galleryIndex?0:-1}" data-gallery="${index}">${entry.tab}</button>`).join('');
     $('#gallery-panel').setAttribute('aria-labelledby',`gallery-tab-${galleryIndex}`);
-    $('#gallery-type').textContent=text(item.type);
-    $('#gallery-title').textContent=text(item.title);
-    $('#gallery-caption').textContent=text(item.caption);
-    if(galleryIndex===2){const a=document.createElement('a');a.href='https://www.openstreetmap.org/copyright';a.target='_blank';a.rel='noopener';a.textContent=language==='en'?' Map attribution ↗':' 地图版权说明 ↗';$('#gallery-caption').append(a);}
-    $('#gallery-boundary').textContent=text(item.boundary);
-    const image=$('#gallery-image');image.src=item.file;image.alt=text(item.caption);image.width=item.width;image.height=item.height;
-    for(const button of [$('#gallery-zoom'),$('#gallery-image-button')]){button.dataset.image=item.file;button.dataset.alt=text(item.title);button.setAttribute('aria-label',(language==='en'?'Expand: ':'放大：')+text(item.title));}
+    $('#gallery-type').textContent=item.type;
+    $('#gallery-title').textContent=item.title;
+    $('#gallery-caption').textContent=item.caption;
+    if(galleryIndex===2){const a=document.createElement('a');a.href='https://www.openstreetmap.org/copyright';a.target='_blank';a.rel='noopener';a.textContent=' Map attribution ↗';$('#gallery-caption').append(a);}
+    $('#gallery-boundary').textContent=item.boundary;
+    const image=$('#gallery-image');image.src=item.file;image.alt=item.caption;image.width=item.width;image.height=item.height;
+    for(const button of [$('#gallery-zoom'),$('#gallery-image-button')]){button.dataset.image=item.file;button.dataset.alt=item.title;button.setAttribute('aria-label','Expand: '+item.title);}
   }
-  function renderLanguage(){
-    document.documentElement.lang=language==='en'?'en':'zh-CN';
-    $$('[data-i18n]').forEach(el=>{el.innerHTML=language==='en'?originalText.get(el):content.zh[el.dataset.i18n]||originalText.get(el);});
-    $('h1').innerHTML=text(content.title);
-    $('#abstract-text').textContent=text(content.abstract);
-    $('#language').innerHTML=language==='en'?'中文 <span aria-hidden="true">↗</span>':'EN <span aria-hidden="true">↗</span>';
-    $('#language').setAttribute('aria-label',language==='en'?'Switch to Chinese':'Switch to English');
-    $('#close-dialog').setAttribute('aria-label',language==='en'?'Close enlarged figure':'关闭放大图片');
+  function renderContent(){
+    $('h1').innerHTML=content.title;
+    $('#abstract-text').textContent=content.abstract;
     renderMethod();renderResults();renderGallery();
   }
-  $('#language').addEventListener('click',()=>{language=language==='en'?'zh':'en';renderLanguage();});
   function delegatedTabs(selector,key,render){
     $(selector).addEventListener('click',event=>{
       const button=event.target.closest(`[data-${key}]`);if(!button)return;
@@ -101,7 +93,7 @@
     let success=false;
     if(navigator.clipboard&&window.isSecureContext){try{await navigator.clipboard.writeText(content.bibtex);success=true;}catch{}}
     if(!success){const textarea=document.createElement('textarea');textarea.value=content.bibtex;textarea.style.cssText='position:fixed;left:-9999px;top:0';document.body.append(textarea);textarea.select();try{success=document.execCommand('copy');}catch{}textarea.remove();$('#copy-citation').focus({preventScroll:true});}
-    toast(success?(language==='en'?'BibTeX copied to clipboard':'BibTeX 已复制'):(language==='en'?'Select the citation text to copy it manually':'请选择引用文本手动复制'));
+    toast(success?'BibTeX copied to clipboard':'Select the citation text to copy it manually');
   });
   function schematic(){
     let signals='';for(let row=0;row<4;row++){let d='';for(let x=0;x<=276;x+=3){const y=25+row*32+Math.sin(x/12+row*2)*7+Math.sin(x/5.5+row)*3;d+=`${x?'L':'M'}${x+5},${y.toFixed(2)} `;}signals+=`<path d="${d}" fill="none" stroke="${['#357a71','#789fb8','#5e8d59','#6f92a1'][row]}" stroke-width="1.5"/>`;}
@@ -118,5 +110,5 @@
   function updateProgress(){const max=document.documentElement.scrollHeight-innerHeight;$('#read-progress').style.width=`${max>0?scrollY/max*100:0}%`;}
   addEventListener('scroll',updateProgress,{passive:true});addEventListener('resize',updateProgress);
   if('IntersectionObserver' in window){const observer=new IntersectionObserver(entries=>{for(const entry of entries){if(entry.isIntersecting){$$('nav a').forEach(link=>link.classList.toggle('active',link.hash===`#${entry.target.id}`));}}},{rootMargin:'-15% 0px -60% 0px'});$$('main section[id]').forEach(section=>observer.observe(section));}
-  schematic();updateDimension();renderLanguage();updateProgress();window.__scdmReady=true;
+  schematic();updateDimension();renderContent();updateProgress();window.__scdmReady=true;
 })();
