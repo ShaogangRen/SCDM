@@ -276,23 +276,46 @@ def load_episode_dataset(
         raise ValueError("lag must be at least 1.")
 
     mode = _normalize_mode(normalize)
-    sequences, ground_truth_graph, variable_names, source = load_raw_sequences(
-        dataset_format=dataset_format,
-        dataset_path=dataset_path,
-        data_root=data_root,
-        sequence_glob=sequence_glob,
-        structure_glob=structure_glob,
-    )
-
-    split_sequences: dict[str, list[np.ndarray]] = {"train": [], "val": [], "test": []}
-    for sequence in sequences:
-        splits = _chronological_split(sequence, split_ratio)
-        for split_name, split_array in splits.items():
-            if len(split_array) <= lag:
-                raise ValueError(
-                    f"Split {split_name!r} length {len(split_array)} is not larger than lag {lag}."
-                )
-            split_sequences[split_name].append(split_array)
+    source = _resolve_source(dataset_path, data_root)
+    split_sequences = None
+    # Dataset releases preserve the original sequence partitions. This only
+    # changes input loading; the model, training and graph readout are unchanged.
+    if str(dataset_format).lower() == "npz" and source.is_file():
+        with np.load(source, allow_pickle=False) as payload:
+            split_keys = {name: "X_" + name for name in ("train", "val", "test")}
+            if all(key in payload for key in split_keys.values()):
+                split_sequences = {}
+                for name, key in split_keys.items():
+                    x = np.asarray(payload[key], dtype=np.float32)
+                    if x.ndim != 3 or x.shape[0] == 0 or x.shape[1] <= lag:
+                        raise ValueError(f"{key} must have shape [replicas, time, variables], with time > lag.")
+                    split_sequences[name] = [np.ascontiguousarray(row) for row in x]
+                sequences = [row for group in split_sequences.values() for row in group]
+                widths = {row.shape[1] for row in sequences}
+                if len(widths) != 1:
+                    raise ValueError("Predefined partitions have inconsistent variable counts.")
+                num_nodes = sequences[0].shape[1]
+                ground_truth_graph = np.asarray(payload["A"], dtype=np.float32) if "A" in payload else None
+                if ground_truth_graph is not None and ground_truth_graph.shape != (num_nodes, num_nodes):
+                    raise ValueError("Ground-truth shape does not match predefined partition width.")
+                variable_names = [str(v) for v in payload["variable_names"]] if "variable_names" in payload else _default_variable_names(num_nodes)
+                if len(variable_names) != num_nodes:
+                    raise ValueError("Variable-name count does not match predefined partition width.")
+    predefined_partitions = split_sequences is not None
+    if split_sequences is None:
+        sequences, ground_truth_graph, variable_names, source = load_raw_sequences(
+            dataset_format=dataset_format, dataset_path=dataset_path,
+            data_root=data_root, sequence_glob=sequence_glob, structure_glob=structure_glob,
+        )
+        split_sequences = {"train": [], "val": [], "test": []}
+        for sequence in sequences:
+            splits = _chronological_split(sequence, split_ratio)
+            for split_name, split_array in splits.items():
+                if len(split_array) <= lag:
+                    raise ValueError(
+                        f"Split {split_name!r} length {len(split_array)} is not larger than lag {lag}."
+                    )
+                split_sequences[split_name].append(split_array)
 
     train_mean, train_std = _fit_zscore_stats(split_sequences["train"])
 
@@ -348,6 +371,8 @@ def load_episode_dataset(
             "transformed_std": transformed_std.tolist(),
         },
         "split_ratio": list(split_ratio),
+        "split_protocol": "predefined_sequence_partitions" if predefined_partitions else "chronological_per_sequence",
+        "split_sequence_counts": {name: len(group) for name, group in split_sequences.items()},
         "seed": int(seed),
         "l_sup": int(l_sup),
         "l_qry": int(l_qry),

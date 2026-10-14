@@ -1,0 +1,20 @@
+# Original 100-ROI simulation, complete 200/50/50 sequence partitions.
+dataset_format: npz
+dataset_path: fmri100_v1.npz
+data_root: data
+lag: 3
+normalize: none
+batch_size: 64
+total_outer_steps: 5000
+tasks_per_outer_step: 32
+target_sampling_mode: uniform_random
+val_every_outer_steps: 250
+val_episodes: 10
+val_tasks_per_episode: 32
+patience: 0
+graph_readout: structural
+run_source_isolated_readout: false
+source_isolated_episodes: 0
+threshold_mode: f1_max
+seed: 0
+output_dir: results/fmri100_seed0

@@ -12,6 +12,7 @@ Jingbo Wang, Kegeng Tang, Zihao Wang, and Shaogang Ren · NeurIPS 2026
 scdm/           Core algorithm implementation
 configs/        Training and example configurations
 examples/       Bundled example datasets
+data/           Original simulation download manifest and format documentation
 scripts/        Run commands
 docs/           Project webpage and its assets
 requirements.txt
@@ -56,6 +57,24 @@ A latent NC8 diagnostic is also included:
 ```bash
 python -m scdm.latent.cli --config configs/latent/nc8_appendix_c_quick.yaml --device cpu
 ```
+
+## Original simulation benchmarks
+
+The complete 100-variable fMRI/EEG and 1,000-variable voxel simulation data are
+available in the [datasets-v1 release](https://github.com/ShaogangRen/SCDM/releases/tag/datasets-v1).
+See [data/README.md](data/README.md) for splits, array orientation, checksums,
+dataset citation, and full-budget single-seed commands.
+
+```bash
+python scripts/download_datasets.py
+python -m scdm.nonlatent.cli --config configs/nonlatent/fmri100.yaml --device cuda --seed 0
+python -m scdm.nonlatent.cli --config configs/nonlatent/eeg100.yaml --device cuda --seed 0
+python -m scdm.nonlatent.cli --config configs/nonlatent/voxel1000.yaml --device cuda --seed 0
+```
+
+These configurations use the original complete simulations and preserve their
+data partitions. Single-seed outputs and hardware timings can differ from the
+paper's multi-seed summaries and fixed-budget comparisons.
 
 ## Core implementation
 

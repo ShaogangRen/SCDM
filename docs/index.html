@@ -14,10 +14,10 @@
   <link rel="canonical" href="https://shaogangren.github.io/SCDM/">
   <title>SCDM | Scalable Causal Discovery with Meta-Learning</title>
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-  <link rel="stylesheet" href="styles.css?v=20261012-en">
-  <link rel="stylesheet" href="academic.css?v=20261012-en">
-  <script defer src="content.js?v=20261012-en"></script>
-  <script defer src="app.js?v=20261012-en"></script>
+  <link rel="stylesheet" href="styles.css?v=20261013-data">
+  <link rel="stylesheet" href="academic.css?v=20261013-data">
+  <script defer src="content.js?v=20261013-data"></script>
+  <script defer src="app.js?v=20261013-data"></script>
 </head>
 <body>
 <a class="skip" href="#overview">Skip to content</a>
@@ -37,7 +37,7 @@
     <p class="hero-deck">A shared-parameter framework for nonlinear temporal causal discovery.</p>
     <div class="authors" id="authors"></div>
     <p class="affiliation">University of Tennessee at Chattanooga</p>
-    <div class="hero-actions"><a class="button primary" href="https://github.com/ShaogangRen/SCDM" target="_blank" rel="noopener"><span>Project GitHub</span><span aria-hidden="true">↗</span></a><a class="button" href="#citation"><span aria-hidden="true">{ }</span><span>Cite this work</span></a></div>
+    <div class="hero-actions"><a class="button primary" href="https://github.com/ShaogangRen/SCDM" target="_blank" rel="noopener"><span>Project GitHub</span><span aria-hidden="true">↗</span></a><a class="button" href="#datasets">Data &amp; benchmarks <span aria-hidden="true">↓</span></a> <a class="button" href="#citation"><span aria-hidden="true">{ }</span><span>Cite this work</span></a></div>
     <p class="hero-code-status">Explore the core implementation and runnable examples on GitHub.</p>
   </section>
   <section class="visual-story wrap" aria-label="Conceptual SCDM pipeline">
@@ -87,7 +87,17 @@
     <div class="theory-layout"><div><span class="eyebrow">05 / Theory & scope</span><h2>A recovery principle,<br>with explicit conditions.</h2><p>For a fully observed delayed system, the graph can be recovered when estimation errors remain small relative to the population risk margin.</p></div><div class="theory-box"><span class="eyebrow">Sufficient condition</span><div class="theory-equation">ε<sub>stat</sub> + ε<sub>meta</sub> + ε<sub>readout</sub> <span>&lt;</span> Δ<sub>min</sub> / 2</div><dl><div><dt>ε<sub>stat</sub></dt><dd>Finite-sample error under temporal dependence</dd></div><div><dt>ε<sub>meta</sub></dt><dd>Residual from finite episodic meta-training</dd></div><div><dt>ε<sub>readout</sub></dt><dd>Difference between implemented and ideal readout</dd></div></dl><p>Under the stated assumptions, a threshold inside the separating margin recovers the delayed graph with high probability.</p></div></div>
     <div class="scope-note"><span class="eyebrow">Interpretation matters</span><p>The guarantee assumes causal sufficiency, a correct history order, temporal regularity, a positive population margin, and controlled estimation errors. It does not cover arbitrary hidden confounding. Predictive readout and geographic locality are diagnostics; neither alone verifies an individual causal effect.</p></div>
   </section>
-  <section id="resources" class="section resources-section"><div class="wrap"><span class="eyebrow">06 / Read & build on this work</span><div class="resource-heading"><h2>The paper and<br>what comes next.</h2></div><div class="resources-list"><div><span>01</span><div><strong>Paper &amp; supplementary material</strong><small>Manuscript and supplementary material will be added here</small></div><span class="resource-status">To be added</span></div><a href="https://github.com/ShaogangRen/SCDM" target="_blank" rel="noopener"><span>02</span><div><strong>Code & reproducibility</strong><small>Core implementation, example configurations, and bundled data</small></div><span>↗</span></a><div><span>03</span><div><strong>Presentation materials</strong><small>Slides and talk video can be added here</small></div><span class="resource-status">To be added</span></div></div></div></section>
+  <section id="resources" class="section resources-section"><div class="wrap"><span class="eyebrow">06 / Read & build on this work</span><div class="resource-heading"><h2>The paper and<br>what comes next.</h2></div><div class="resources-list"><div><span>01</span><div><strong>Paper &amp; supplementary material</strong><small>Manuscript and supplementary material will be added here</small></div><span class="resource-status">To be added</span></div><a href="https://github.com/ShaogangRen/SCDM" target="_blank" rel="noopener"><span>02</span><div><strong>Code & reproducibility</strong><small>Core implementation, original simulation datasets, and runnable configurations</small></div><span>↗</span></a><div><span>03</span><div><strong>Presentation materials</strong><small>Slides and talk video can be added here</small></div><span class="resource-status">To be added</span></div></div></div></section>
+  <section id="datasets" class="section wrap">
+    <div class="section-heading"><span class="eyebrow">DATA &amp; REPRODUCIBILITY</span><h2>Download the original simulations.</h2><p>Complete benchmark arrays with known directed graphs, preserved sequence partitions, and SHA-256 checksums.</p></div>
+    <div class="resources-list">
+      <a href="https://github.com/ShaogangRen/SCDM/releases/download/datasets-v1/fmri100_v1.npz"><span>01</span><div><strong>Simulated fMRI · 100 ROIs</strong><small>200 / 50 / 50 sequences · 1,000 time steps each · 111 MB NPZ</small></div><span>Download ↗</span></a>
+      <a href="https://github.com/ShaogangRen/SCDM/releases/download/datasets-v1/eeg100_v1.npz"><span>02</span><div><strong>Simulated EEG · 100 sources</strong><small>200 / 50 / 50 sequences · 2,000 time steps each · 222 MB NPZ</small></div><span>Download ↗</span></a>
+      <a href="https://github.com/ShaogangRen/SCDM/releases/download/datasets-v1/voxel1000_v1.npz"><span>03</span><div><strong>Voxel-level fMRI · 1,000 observed variables</strong><small>5 trajectories · 800 time steps each · 7,142 directed edges · 14.8 MB NPZ</small></div><span>Download ↗</span></a>
+      <a href="https://github.com/ShaogangRen/SCDM/blob/main/data/README.md" target="_blank" rel="noopener"><span>04</span><div><strong>Run, inspect, and cite these benchmarks</strong><small>Download script, full-budget single-seed commands, file formats, checksums, and dataset citation</small></div><span>Read ↗</span></a>
+    </div>
+    <p class="figure-note">These are simulated datasets, not recordings from human participants. fMRI and EEG retain the original train / validation / test sequence partitions. The voxel simulator includes latent regional drivers. The 64-variable quick start is a separate lightweight example. A single-seed run can differ from the paper's multi-seed results.</p>
+  </section>
   <section id="citation" class="section wrap citation-section"><div class="citation-head"><div><span class="eyebrow">Citation</span><h2>Reference this work.</h2></div><button id="copy-citation" class="button">Copy BibTeX</button></div><pre><code id="bibtex"></code></pre><p class="figure-note">Citation uses the paper title and author list.</p></section>
 </main>
 <footer class="wrap footer"><a class="brand" href="https://shaogangren.github.io/" target="_blank" rel="noopener">Ren’s Lab</a><p>SCDM · NeurIPS 2026</p><a href="mailto:shaogang-ren@utc.edu">Contact the authors ↗</a></footer>

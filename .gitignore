@@ -1,5 +1,7 @@
 # Run outputs
 results/
+data/*.npz
+data/*.partial
 *.ckpt
 *.log
 

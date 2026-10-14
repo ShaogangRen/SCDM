@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "release": "datasets-v1",
+  "repository": "ShaogangRen/SCDM",
+  "datasets": [
+    {
+      "dataset": "fmri100",
+      "title": "Simulated fMRI (Schaefer100, fmri_v1b)",
+      "variables": 100,
+      "ground_truth_orientation": "source-target: A[source,target]",
+      "split_protocol": "predefined sequence partitions: 200 train,50 validation,50 test",
+      "simulation_only": true,
+      "latent_drivers_in_simulator": false,
+      "version": "v1",
+      "array_shapes": {
+        "X_train": [
+          200,
+          1000,
+          100
+        ],
+        "X_val": [
+          50,
+          1000,
+          100
+        ],
+        "X_test": [
+          50,
+          1000,
+          100
+        ],
+        "A": [
+          100,
+          100
+        ],
+        "A_lags": [
+          3,
+          100,
+          100
+        ],
+        "coords": [
+          100,
+          3
+        ],
+        "variable_names": [
+          100
+        ]
+      },
+      "ground_truth_edges_offdiagonal": 1220,
+      "filename": "fmri100_v1.npz",
+      "bytes": 111119813,
+      "sha256": "84ded5ceaaf42960790660bd129cc735dc2c2fab70b4c197cae5e530a9c4abc8",
+      "url": "https://github.com/ShaogangRen/SCDM/releases/download/datasets-v1/fmri100_v1.npz"
+    },
+    {
+      "dataset": "eeg100",
+      "title": "Simulated EEG (Schaefer100 source space)",
+      "variables": 100,
+      "ground_truth_orientation": "source-target: A[source,target]",
+      "split_protocol": "predefined sequence partitions: 200 train,50 validation,50 test",
+      "simulation_only": true,
+      "latent_drivers_in_simulator": false,
+      "version": "v1",
+      "array_shapes": {
+        "X_train": [
+          200,
+          2000,
+          100
+        ],
+        "X_val": [
+          50,
+          2000,
+          100
+        ],
+        "X_test": [
+          50,
+          2000,
+          100
+        ],
+        "A": [
+          100,
+          100
+        ],
+        "A_lags": [
+          5,
+          100,
+          100
+        ],
+        "coords": [
+          100,
+          3
+        ],
+        "variable_names": [
+          100
+        ]
+      },
+      "ground_truth_edges_offdiagonal": 1138,
+      "filename": "eeg100_v1.npz",
+      "bytes": 221607456,
+      "sha256": "84b82dae29676032039ebd666b877459756ee68c6f5367fe969a6306408fa7e3",
+      "url": "https://github.com/ShaogangRen/SCDM/releases/download/datasets-v1/eeg100_v1.npz"
+    },
+    {
+      "dataset": "voxel1000",
+      "title": "Simulated voxel-level fMRI v2",
+      "variables": 1000,
+      "ground_truth_orientation": "source-target: A[source,target]",
+      "split_protocol": "chronological70/15/15 within each of5 observed sequences",
+      "simulation_only": true,
+      "latent_drivers_in_simulator": true,
+      "version": "v1",
+      "array_shapes": {
+        "X": [
+          5,
+          800,
+          1000
+        ],
+        "A": [
+          1000,
+          1000
+        ],
+        "A_lags": [
+          3,
+          1000,
+          1000
+        ],
+        "coords": [
+          1000,
+          3
+        ],
+        "permuted_index_to_original_index": [
+          1000
+        ],
+        "variable_names": [
+          1000
+        ]
+      },
+      "ground_truth_edges_offdiagonal": 7142,
+      "filename": "voxel1000_v1.npz",
+      "bytes": 14825198,
+      "sha256": "aeb16a33b8d56745e615ab5568622e25e127dde277e0a8b7309d7fce07a2cf18",
+      "url": "https://github.com/ShaogangRen/SCDM/releases/download/datasets-v1/voxel1000_v1.npz"
+    }
+  ]
+}
