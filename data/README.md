@@ -42,6 +42,11 @@ All packages are NumPy `.npz` files readable with `np.load(path, allow_pickle=Fa
   `permuted_index_to_original_index` to map the saved column order back to spatial indices.
 - `dataset_info_json`: UTF-8 JSON metadata stored as a Unicode scalar.
 
+The original [fMRI ROI table](metadata/fmri100_rois.csv) and
+[EEG ROI table](metadata/eeg100_rois.csv) map `Xj` to zero-based `roi_index=j`,
+Schaefer atlas labels, Yeo network labels, hemispheres, and coordinates.
+Atlas metadata should be attributed to the atlas authors cited below.
+
 For example:
 
 ```python
