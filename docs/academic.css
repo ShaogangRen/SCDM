@@ -17,3 +17,13 @@ h1{font-size:clamp(29px,3.2vw,42px);line-height:1.23;max-width:1000px;color:#243
 @media(min-width:1400px){.hero{padding-top:42px}.visual-story{margin-top:0}}
 @media(max-width:950px){.hero{margin-left:32px;margin-right:32px}.lab-brand{font-size:12px;gap:8px}.header-inner{gap:17px}.authors{font-size:15px;gap:18px}}
 @media(max-width:700px){.hero{margin:25px 22px;padding:30px 21px 26px;border-radius:12px}h1{font-size:29px;line-height:1.25}.hero .venue{font-size:9px;margin-bottom:18px}.hero-deck{font-size:12px;margin:17px auto 20px}.authors{gap:9px 17px;font-size:13px}.affiliation{font-size:12px;margin:15px 0 20px}.hero-actions{gap:8px}.hero-actions .button{font-size:11px;padding:9px 11px}.lab-brand{font-size:12px}.brand{font-size:14px}.story-top{padding:14px}.story-stage{padding:18px}.story-stage:not(:last-child){border-right:0;border-bottom:1px solid var(--line)}.story-stage:not(:last-child):after{background:#e5efeb}.section{padding-top:49px;padding-bottom:49px}.section-heading h2{font-size:29px}.theory-layout h2,.resource-heading h2{font-size:29px}.citation-head h2{font-size:27px}.theta{font-size:13px}.hero-code-status{font-size:10px}.story-bottom{font-size:10px}}
+
+/* Compact linked badges and paper-style section shortcuts. */
+.resource-badges{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:7px;margin:0 auto 17px}
+.resource-badges a{display:inline-flex;line-height:0;border-radius:3px;transition:opacity .15s,transform .15s}
+.resource-badges a:hover{opacity:.86;transform:translateY(-1px)}
+.resource-badges img{display:block;height:20px;max-width:100%}
+.hero-jump-links{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:3px 8px;margin:0 auto;line-height:1.8}
+.hero-jump-links a{font-size:13px;color:#246d97;text-decoration:underline;text-underline-offset:3px}
+.hero-jump-links a:hover{color:#164b6b}.hero-jump-links>span{font-size:12px;color:#8b9ba4}
+@media(max-width:700px){.resource-badges{gap:6px;margin-bottom:14px}.hero-jump-links{gap:2px 6px}.hero-jump-links a{font-size:11px}}
