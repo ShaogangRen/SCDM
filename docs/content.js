@@ -353,5 +353,5 @@ window.SCDM = {
       "boundary": "LargeST does not provide complete directed causal ground truth. Nearby inferred relations support spatial plausibility, not verification of individual causal edges."
     }
   ],
-  "bibtex": "@inproceedings{wang2026scdm,\n  title     = {SCDM: Scalable Causal Discovery in Nonlinear Temporal Systems with Meta-Learning},\n  author    = {Wang, Jingbo and Tang, Kegeng and Wang, Zihao and Ren, Shaogang},\n  booktitle = {Advances in Neural Information Processing Systems},\n  year      = {2026},\n  url       = {https://shaogangren.github.io/SCDM/}\n}"
+  "bibtex": "@inproceedings{wang2026scdm,\n  title     = {SCDM: Scalable Causal Discovery in Nonlinear Temporal Systems with Meta-Learning},\n  author    = {Wang, Jingbo and Tang, Kegeng and Wang, Zihao and Ren, Shaogang},\n  booktitle = {Advances in Neural Information Processing Systems},\n  year      = {2026},\n  eprint    = {2610.29992},\n  archivePrefix = {arXiv},\n  url       = {https://arxiv.org/abs/2610.29992}\n}"
 };
