@@ -4,7 +4,7 @@
 
 Jingbo Wang, Kegeng Tang, Zihao Wang, and Shaogang Ren · NeurIPS 2026
 
-[Project webpage](https://shaogangren.github.io/SCDM/) · [Paper](https://openreview.net/forum?id=H2Bm4cicZc)
+[Project webpage](https://shaogangren.github.io/SCDM/) · [Paper](https://arxiv.org/abs/2610.29992)
 
 ## Repository layout
 
@@ -101,7 +101,7 @@ predictor and structural parameters. Graph scores are read out after training.
   author = {Wang, Jingbo and Tang, Kegeng and Wang, Zihao and Ren, Shaogang},
   booktitle = {Advances in Neural Information Processing Systems},
   year = {2026},
-  url = {https://openreview.net/forum?id=H2Bm4cicZc}
+  url = {https://arxiv.org/abs/2610.29992}
 }
 ```
 
