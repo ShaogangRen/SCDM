@@ -12,7 +12,7 @@ window.SCDM = {
     },
     {
       "name": "Zihao Wang",
-      "url": "https://drzihao.wang/"
+      "url": null
     },
     {
       "name": "Shaogang Ren",
